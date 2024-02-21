@@ -1,9 +1,20 @@
 import { Separator } from "@radix-ui/react-separator";
-import { useNavigation } from "@remix-run/react";
+import { json, type LoaderFunctionArgs } from "@remix-run/node";
+import { useLoaderData, useNavigation } from "@remix-run/react";
 import { PostSearch } from "~/components/post-search";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 
+export const loader = ({ request } : LoaderFunctionArgs) => {
+    const url = new URL(request.url);
+    const searchParams = url.searchParams;
+    const query = searchParams.get("query");
+
+    return json({ query })
+}
+
+
 export default function Gitposts() {
+    const { query } = useLoaderData<typeof loader>();
     const navigation = useNavigation();
 
     const isSearching = Boolean(
@@ -19,7 +30,7 @@ export default function Gitposts() {
             </TabsList> 
             <TabsContent value="view-posts">
                 <Separator/>
-                <PostSearch isSearching={isSearching} searchQuery={''}/>
+                <PostSearch isSearching={isSearching} searchQuery={query}/>
                 {/* <Post>
                     <ViewLikes/>
                     <ViewComments />
