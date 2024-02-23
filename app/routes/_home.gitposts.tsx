@@ -4,6 +4,7 @@ import { useLoaderData, useNavigation } from "@remix-run/react";
 import { Post } from "~/components/post";
 import { PostSearch } from "~/components/post-search";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { ViewLikes } from "~/components/view-likes";
 
 export const loader = ({ request } : LoaderFunctionArgs) => {
     const url = new URL(request.url);
@@ -41,6 +42,11 @@ export default function Gitposts() {
                     id="56789"
                     dateTimeString="30, Nov 2024"
                 >
+                    <ViewLikes 
+                        likes={69}
+                        likedByUser={true}
+                        pathname={`/profile/w-kuah`}
+                    />
                     {/* <ViewLikes/>
                     <ViewComments /> */}
                 </Post>
