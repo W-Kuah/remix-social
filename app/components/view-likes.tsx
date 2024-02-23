@@ -23,5 +23,5 @@ export function ViewLikes({ likes, likedByUser, pathname }: ViewLikesProps) {
             </span>
         </Link>
         
-    )
+    );
 }
