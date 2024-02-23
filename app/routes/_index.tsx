@@ -1,14 +1,20 @@
-import type { MetaFunction } from "@remix-run/node";
+import { LoaderFunctionArgs, redirect, json } from "@remix-run/node";
 import { Link } from "@remix-run/react"
 import { AppLogo } from "~/components/app-logo";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
+import { getSupabaseWithSessionAndHeaders } from "~/lib/supabase.server";
 
-export const meta: MetaFunction = () => {
-  return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
-  ];
+export let loader = async ({ request }: LoaderFunctionArgs) => {
+  const { headers, serverSession } = await getSupabaseWithSessionAndHeaders({
+      request,
+  });
+
+  if (serverSession) {
+      return redirect("/gitposts", { headers });
+  }
+
+  return json({ success: true}, { headers });
 };
 
 export default function Index() {

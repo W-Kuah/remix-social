@@ -1,11 +1,17 @@
 import { Cross2Icon, HamburgerMenuIcon } from "@radix-ui/react-icons";
-import { Link, Outlet } from "@remix-run/react";
+import { Link, Outlet, useOutletContext } from "@remix-run/react";
 import { useState } from "react";
 import { AppLogo } from "~/components/app-logo";
 import { Button } from "~/components/ui/button";
+import type { SupabaseOutletContext } from "~/lib/supabase";
 
 export default function Home() {
     const [isNavOpen, setNavOpen] = useState(false);
+    const { supabase } = useOutletContext<SupabaseOutletContext>();
+
+    const handleSignOut = async () => {
+        await supabase.auth.signOut();
+    }
 
     return (
         <section className="w-full bg-white min-h-screen flex flex-col items-center">
@@ -36,7 +42,7 @@ export default function Home() {
                         }}
                         width="40"
                     />
-                    <Button>Logout</Button>
+                    <Button onClick={handleSignOut}>Logout</Button>
                 </div>
             </nav>
             <Outlet/>
