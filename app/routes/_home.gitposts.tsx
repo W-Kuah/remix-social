@@ -1,6 +1,7 @@
 import { Separator } from "@radix-ui/react-separator";
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData, useNavigation } from "@remix-run/react";
+import { Post } from "~/components/post";
 import { PostSearch } from "~/components/post-search";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 
@@ -31,10 +32,18 @@ export default function Gitposts() {
             <TabsContent value="view-posts">
                 <Separator/>
                 <PostSearch isSearching={isSearching} searchQuery={query}/>
-                {/* <Post>
-                    <ViewLikes/>
-                    <ViewComments />
-                </Post> */}
+                <Post
+                    avatarUrl={"https://media.licdn.com/dms/image/C5603AQHHZKGHek6vVQ/profile-displayphoto-shrink_200_200/0/1605196900942?e=1714003200&v=beta&t=xW7p245uvRWiW5NMP8z6guERhG0nGG-Zigl46TjTKv8"}
+                    name="Warren Kuah"
+                    username="w-kuah"
+                    title={"## markdown title"}
+                    userId="12345"
+                    id="56789"
+                    dateTimeString="30, Nov 2024"
+                >
+                    {/* <ViewLikes/>
+                    <ViewComments /> */}
+                </Post>
             </TabsContent>
             <TabsContent value="write-posts">
                 {/* <WritePost/> */}
