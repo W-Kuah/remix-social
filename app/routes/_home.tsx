@@ -1,11 +1,37 @@
 import { Cross2Icon, HamburgerMenuIcon } from "@radix-ui/react-icons";
-import { Link, Outlet, useOutletContext } from "@remix-run/react";
+import { LoaderFunctionArgs, json } from "@remix-run/node";
+import { Link, Outlet, redirect, useLoaderData, useOutletContext } from "@remix-run/react";
 import { useState } from "react";
 import { AppLogo } from "~/components/app-logo";
 import { Button } from "~/components/ui/button";
 import type { SupabaseOutletContext } from "~/lib/supabase";
+import { getSupabaseWithSessionAndHeaders } from "~/lib/supabase.server";
+import { getUserDataFromSession } from "~/lib/utils";
+
+export const loader = async ({ request } : LoaderFunctionArgs) => {
+    const { headers, supabase, serverSession } = 
+    await getSupabaseWithSessionAndHeaders({
+        request,
+    });
+
+    if (!serverSession) {
+        return redirect("/login", { headers });
+    }
+
+    const { userId, userAvatarUrl, username } = 
+        getUserDataFromSession(serverSession);
+    
+    return json(
+        { userDetails: { userId, userAvatarUrl, username }},
+        { headers }
+    );
+}
 
 export default function Home() {
+    const {
+        userDetails: { userAvatarUrl, username },
+    } = useLoaderData<typeof loader>();
+    
     const [isNavOpen, setNavOpen] = useState(false);
     const { supabase } = useOutletContext<SupabaseOutletContext>();
 
@@ -30,12 +56,12 @@ export default function Home() {
                         : "hidden md:flex"
                     }`}
                 >
-                    <Link prefetch="intent" to={`/profile/w-kuah`}>@w-kuah</Link>
+                    <Link prefetch="intent" to={`/profile/${username}`}>@{username}</Link>
                     <img 
                         alt="Profile" 
                         className="rounded-full"
                         height="40"
-                        src={"https://media.licdn.com/dms/image/C5603AQHHZKGHek6vVQ/profile-displayphoto-shrink_200_200/0/1605196900942?e=1714003200&v=beta&t=xW7p245uvRWiW5NMP8z6guERhG0nGG-Zigl46TjTKv8"}
+                        src={userAvatarUrl}
                         style={{
                             aspectRatio: "40/40",
                             objectFit: "cover",
