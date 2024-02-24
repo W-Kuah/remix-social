@@ -14,25 +14,50 @@ import { UpdateIcon } from "@radix-ui/react-icons";
 
 type WritePostProps = {
     sessionUserId: string;
+    postId?: string;
 }
 
-export function WritePost({ sessionUserId }: WritePostProps) {
+export function WritePost({ sessionUserId, postId }: WritePostProps) {
     const [title, setTitle] = useState("");
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const fetcher = useFetcher();
     const isPosting = fetcher.state !== "idle";
     const isDisabled = isPosting || !title;
-    const postActionUrl = "/resources/post";
+    const isComment = Boolean(postId);
+
+    const postActionUrl = isComment ? "/resources/comment" : "/resources/post";
 
     const postTitle = () => {
         const formData = {
             title,
             userId: sessionUserId,
+            ...(isComment ? { postId } : {}),
         };
 
         fetcher.submit(formData, { method: "POST", action: postActionUrl });
         setTitle("");
     };
+
+    if(isComment) {
+        return (
+            <Card className="mb-4">
+                <CardContent className="p-4 text-right">
+                <Textarea 
+                    ref={textareaRef}
+                    placeholder="Type your comment here!!!" 
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="mb-2"
+                />
+                <Button onClick={postTitle} disabled={isDisabled}>
+                    {isPosting && <UpdateIcon className="mr-2 h-4 w-4 animate-spin" />}
+                    {isPosting ? "Commenting" : "Comment"}
+                </Button>
+                </CardContent>
+            </Card>
+        )
+        
+    }
 
     useEffect(() => {
         if(textareaRef.current) {

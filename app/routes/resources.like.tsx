@@ -56,7 +56,7 @@ export function Like({ likedByUser, likes, postId, sessionUserId }: LikeProps) {
     const fetcher = useFetcher();
 
     return (
-        <fetcher.Form>
+        <fetcher.Form action="/resources/like" method="post">
             <input type="hidden" name="postId" value={postId} />
             <input type="hidden" name="userId" value={sessionUserId} />
             <input 

@@ -150,3 +150,25 @@ export async function deleteLike({
 
     return { error };
 }
+
+export async function insertComment({
+    dbClient,
+    userId,
+    postId,
+    title,
+}: {
+    dbClient: SupabaseClient<Database>,
+    userId: string;
+    postId: string;
+    title: string;
+}) {
+    const { error } = await dbClient
+        .from("comments")
+        .insert({ user_id: userId, post_id: postId, title });
+    
+    if (error) {
+        console.log("Error occurred at insertComment ", error);
+    }
+
+    return { error };
+}
