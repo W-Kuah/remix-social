@@ -1,15 +1,13 @@
 import { Separator } from "@radix-ui/react-separator";
 import { json, redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData, useNavigation } from "@remix-run/react";
-import { Post } from "~/components/post";
+import { InfiniteVirtualList } from "~/components/infinite-virtual-list";
 import { PostSearch } from "~/components/post-search";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { ViewComments } from "~/components/view-comments";
-import { ViewLikes } from "~/components/view-likes";
 import { WritePost } from "~/components/write-post";
 import { getAllPostsWithDetails } from "~/lib/database.server";
 import { getSupabaseWithSessionAndHeaders } from "~/lib/supabase.server";
-import { combinePostsWithLikes, formatToTwitterDate, getUserDataFromSession } from "~/lib/utils";
+import { combinePostsWithLikes, getUserDataFromSession } from "~/lib/utils";
 
 export const loader = async ({ request } : LoaderFunctionArgs) => {
     const { headers, supabase, serverSession } = 
@@ -24,8 +22,9 @@ export const loader = async ({ request } : LoaderFunctionArgs) => {
     const url = new URL(request.url);
     const searchParams = url.searchParams;
     const query = searchParams.get("query");
+    const page = Number(searchParams.get("page")) || 1;
 
-    const { data } = await getAllPostsWithDetails({ dbClient: supabase });
+    const { data, totalPages } = await getAllPostsWithDetails({ dbClient: supabase, page: isNaN(page) ? 1 : page });
 
     const { 
         userId: sessionUserId, 
@@ -35,19 +34,19 @@ export const loader = async ({ request } : LoaderFunctionArgs) => {
 
     const posts = combinePostsWithLikes(data, sessionUserId);
 
-    return json({ query, posts }, { headers });
+    return json({ query, posts, totalPages }, { headers });
 }
 
 
 export default function gitposts() {
-    const { query, posts } = useLoaderData<typeof loader>();
+    const { query, posts, totalPages } = useLoaderData<typeof loader>();
     const navigation = useNavigation();
     const post = posts[0];
 
     console.log("My post ", post);
 
     const isSearching = Boolean(
-        navigation.location &&
+        navigation.location && 
             new URLSearchParams(navigation.location.search).has("query")
     );
 
@@ -59,26 +58,9 @@ export default function gitposts() {
                     <TabsTrigger value="write-post">Write Posts</TabsTrigger>
                 </TabsList> 
                 <TabsContent value="view-posts">
-                    <Separator/>
                     <PostSearch isSearching={isSearching} searchQuery={query}/>
-                    <Post
-                        avatarUrl={post.author.avatar_url}
-                        name={post.author.name}
-                        username={post.author.username}
-                        title={post.title}
-                        userId={post.author.id}
-                        id={post.id}
-                        dateTimeString={formatToTwitterDate(post.created_at)}
-                    >
-                        <ViewLikes 
-                            likes={post.likes.length}
-                            likedByUser={post.isLikedByUser}
-                            pathname={`/profile/w-kuah`}
-                        />
-                        <ViewComments 
-                            comments={post.comments.length}
-                            pathname={`/profile/w-kuah`}/>
-                    </Post>
+                    <Separator/>
+                    <InfiniteVirtualList incomingPosts={posts} totalPages={totalPages}/>
                 </TabsContent>
                 <TabsContent value="write-post">
                     <WritePost sessionUserId="1234" postId="12334"/>
