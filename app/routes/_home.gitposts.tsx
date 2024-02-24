@@ -38,12 +38,15 @@ export const loader = async ({ request } : LoaderFunctionArgs) => {
 
     const posts = combinePostsWithLikes(data, sessionUserId);
 
-    return json({ query, posts, totalPages }, { headers });
+    return json(
+        { query, posts, totalPages, userDetails: { sessionUserId } }, 
+        { headers }
+    );
 }
 
 
 export default function gitposts() {
-    const { query, posts, totalPages } = useLoaderData<typeof loader>();
+    const { query, posts, totalPages, userDetails: { sessionUserId } } = useLoaderData<typeof loader>();
     const navigation = useNavigation();
     const post = posts[0];
 
@@ -67,7 +70,7 @@ export default function gitposts() {
                     <InfiniteVirtualList incomingPosts={posts} totalPages={totalPages}/>
                 </TabsContent>
                 <TabsContent value="write-post">
-                    <WritePost sessionUserId="1234" postId="12334"/>
+                    <WritePost sessionUserId={sessionUserId}/>
                 </TabsContent>
             </Tabs>
         </div>
