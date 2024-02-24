@@ -115,21 +115,21 @@ export type Database = {
       }
       profiles: {
         Row: {
-          "avatar-url": string
+          avatar_url: string
           created_at: string
           id: string
           name: string
           username: string
         }
         Insert: {
-          "avatar-url": string
+          avatar_url: string
           created_at?: string
           id?: string
           name: string
           username: string
         }
         Update: {
-          "avatar-url"?: string
+          avatar_url?: string
           created_at?: string
           id?: string
           name?: string
