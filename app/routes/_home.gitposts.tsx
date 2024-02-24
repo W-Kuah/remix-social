@@ -24,7 +24,11 @@ export const loader = async ({ request } : LoaderFunctionArgs) => {
     const query = searchParams.get("query");
     const page = Number(searchParams.get("page")) || 1;
 
-    const { data, totalPages } = await getAllPostsWithDetails({ dbClient: supabase, page: isNaN(page) ? 1 : page });
+    const { data, totalPages } = await getAllPostsWithDetails({ 
+        dbClient: supabase, 
+        page: isNaN(page) ? 1 : page,
+        searchQuery: query,
+    });
 
     const { 
         userId: sessionUserId, 
