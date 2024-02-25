@@ -1,6 +1,6 @@
 import { Avatar, AvatarImage } from "~/components/ui/avatar";
 import { LoaderFunctionArgs, json, redirect } from "@remix-run/node"
-import { Link, useLoaderData } from "@remix-run/react"
+import { Link, Outlet, useLoaderData } from "@remix-run/react"
 import { InfiniteVirtualList } from "~/components/infinite-virtual-list"
 import { Separator } from "~/components/ui/separator"
 import { getPostsForUser, getProfileForUsername } from "~/lib/database.server"
@@ -64,6 +64,7 @@ export default function Profile() {
     } = useLoaderData<typeof loader>();
     return (
         <div className="flex flex-col w-full max-w-xl px-4 my-2">
+            <Outlet />
             <div className="flex flex-col justify-center items-center m-4">
                 <Avatar className="w-24 h-24 mb-4">
                     <AvatarImage alt="User avatar" src={avatar_url}></AvatarImage>

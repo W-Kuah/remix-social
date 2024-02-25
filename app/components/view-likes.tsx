@@ -9,7 +9,11 @@ type ViewLikesProps = {
 
 export function ViewLikes({ likes, likedByUser, pathname }: ViewLikesProps) {
     return (
-        <Link to={pathname} className="flex justify-center items-center group">
+        <Link 
+            to={pathname} 
+            preventScrollReset={true}
+            className="flex justify-center items-center group"
+        >
             <Star 
                 className={`w-4 h-4 group-hover:text-blue-400 ${
                     likedByUser ?  "text-blue-700" : "text-gray-500"

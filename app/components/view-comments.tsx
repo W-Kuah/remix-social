@@ -16,7 +16,7 @@ export const ViewComments = ({ comments, pathname, readonly}: ViewCommentsProps)
                 <span className="ml-2 text-sm text-gray-500">{comments}</span>
             </div>
         ) : (
-            <Link to={pathname} className="flex justify-center items-center group">
+            <Link to={pathname} preventScrollReset={true} className="flex justify-center items-center group">
             <MessageCircle className="h-4 w-4 text-gray-500 group-hover:text-green-400"/>
             <span 
                 className={`ml-2 text-sm text-gray-500 group-hover:text-green-400`}
