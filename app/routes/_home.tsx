@@ -41,7 +41,7 @@ export default function Home() {
 
     return (
         <section className="w-full bg-white min-h-screen flex flex-col items-center">
-            <nav className="sticky top-0 z-10 flex w-full item-center justify-between p-4 border-b border-zinc-200 flex-wrap md:flex-nowrap">
+            <nav className="sticky top-0 z-10 flex w-full bg-white item-center justify-between p-4 border-b border-zinc-200 flex-wrap md:flex-nowrap">
                 <Link to="/" className="flex items-center space-x-2">
                     <AppLogo className="h-8 w-8 md:h-10 md:w-10"/>
                     <h1 className="text-xl font-semibold text-zinc-900 relative right-2.5">azzup</h1>

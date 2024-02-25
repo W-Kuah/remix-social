@@ -1,6 +1,8 @@
 import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
 import { useFetcher } from "@remix-run/react";
 import { Star } from "lucide-react";
+import { useEffect } from "react";
+import { useToast } from "~/components/ui/use-toast";
 import { deleteLike, insertLike } from "~/lib/database.server";
 import { getSupabaseWithSessionAndHeaders } from "~/lib/supabase.server";
 
@@ -10,7 +12,7 @@ export async function action({ request }: ActionFunctionArgs) {
         request,
     });
     if (!serverSession) {
-        return redirect("login", { headers });
+        return redirect("/login", { headers });
     }
 
     const formData = await request.formData();
@@ -18,26 +20,36 @@ export async function action({ request }: ActionFunctionArgs) {
     const postId = formData.get("postId")?.toString();
     const userId = formData.get("userId")?.toString();
 
-    const skipRevalidation = ['gitposts', 'profile.$username']
+    const skipRevalidation = ['/gitposts', '/profile.$username']
+
 
     if (!userId || !postId) {
         return json(
             { error: "User or Tweet Id missing"},
             { status: 400, headers}
         );
-    }
+    } 
 
     if(action === "like" ) {
         const { error } = await insertLike({dbClient: supabase, userId, postId });
+        // const { error } = await supabase
+        // .from("likes")
+        // .insert({ user_id: userId, post_id: postId });
 
         if (error) {
-            return json({ error: "Failed to like", skipRevalidation }, { status: 500, headers });
+            return json(
+                { error: "Failed to like", skipRevalidation }, 
+                { status: 500, headers }
+            );
         }
     } else {
         const { error } = await deleteLike({dbClient: supabase, userId, postId });
 
         if (error) {
-            return json({ error: "Failed to like", skipRevalidation }, { status: 500, headers });
+            return json(
+                { error: "Failed to unlike", skipRevalidation }, 
+                { status: 500, headers }
+            );
         }
     }
 
@@ -55,7 +67,30 @@ type LikeProps = {
 };
 
 export function Like({ likedByUser, likes, postId, sessionUserId }: LikeProps) {
-    const fetcher = useFetcher();
+    const fetcher = useFetcher<typeof action>();
+    const inFlightAction = fetcher.formData?.get("action");
+    const isLoading = fetcher.state !== "idle";
+    const { toast } = useToast();
+
+    const optimisticLikedByUser = 
+        inFlightAction 
+        ? inFlightAction === "like" 
+        : likedByUser;
+    const optimisticLikes = inFlightAction
+        ? inFlightAction === "like"
+            ? likes + 1
+            : likes - 1
+        : likes;
+
+        useEffect(() => {
+            if(fetcher.data?.error && !isLoading) {
+                toast({
+                    variant: "destructive",
+                    description: `Error occured: ${fetcher.data?.error}`,
+                });
+            }
+        }, [fetcher.data, isLoading, toast]);
+
 
     return (
         <fetcher.Form action="/resources/like" method="post">
@@ -64,20 +99,20 @@ export function Like({ likedByUser, likes, postId, sessionUserId }: LikeProps) {
             <input 
                 type="hidden" 
                 name="action" 
-                value={likedByUser ? "unlike" : "like"} 
+                value={optimisticLikedByUser ? "unlike" : "like"} 
             />
-            <button className="group flex items-center focus:outline-none">
+            <button className="group flex items-center focus:outline-none" disabled={isLoading}>
                 <Star 
                     className={`w-4 h-4 group-hover:text-blue-400 fill-current ${
-                        likedByUser ?  "text-blue-700" : "text-gray-500"
+                        optimisticLikedByUser ?  "text-blue-700" : "text-gray-500"
                     }`}
                 />
                 <span 
                     className={`ml-2 text-sm group-hover:text-blue-400 ${
-                        likedByUser ?  "text-blue-700" : "text-gray-500"
+                        optimisticLikedByUser ?  "text-blue-700" : "text-gray-500"
                     }`}
                 >
-                    {likes}
+                    {optimisticLikes}
                 </span>
             </button>
         </fetcher.Form>
