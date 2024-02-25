@@ -7,14 +7,20 @@ import { AppLogo } from "./app-logo";
 
 export function InfiniteVirtualList({
     totalPages,
-    incomingPosts
+    incomingPosts,
+    isProfile,
 }: {
-    totalPages: number
+    totalPages: number;
     incomingPosts: CombinedPostsWithAuthorAndLikes;
+    isProfile?: boolean;
 }) {
+    const postRouteId = isProfile
+        ? "routes/_home.profile.$username.$postId"
+        : "routes/_home.gitposts.$postId";
     const { posts, loadMore, hasMorePages } = useInfinitePosts({
         incomingPosts,
         totalPages,
+        postRouteId,
     });
 
     if(!posts.length) {
