@@ -1,6 +1,6 @@
 import { Avatar, AvatarImage } from "~/components/ui/avatar";
 import { LoaderFunctionArgs, json, redirect } from "@remix-run/node"
-import { Link, Outlet, useLoaderData } from "@remix-run/react"
+import { Link, Outlet, ShouldRevalidateFunctionArgs, useLoaderData } from "@remix-run/react"
 import { InfiniteVirtualList } from "~/components/infinite-virtual-list"
 import { Separator } from "~/components/ui/separator"
 import { getPostsForUser, getProfileForUsername } from "~/lib/database.server"
@@ -81,6 +81,19 @@ export default function Profile() {
             <br />
             <InfiniteVirtualList incomingPosts={posts} totalPages={totalPages}/>
         </div>
-    )
-    
+    );
 }
+
+export function shouldRevalidate({
+    actionResult,
+    defaultShouldRevalidate,
+  }: ShouldRevalidateFunctionArgs) {
+    const skipRevalidation = 
+        actionResult?.skipRevalidation && 
+        actionResult?.skipRevalidation?.includes("profile.$username");
+
+    if(skipRevalidation) {
+        return false;
+    }
+    return defaultShouldRevalidate;
+  }
