@@ -1,6 +1,6 @@
 import { Separator } from "@radix-ui/react-separator";
 import { json, redirect, type LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData, useNavigation } from "@remix-run/react";
+import { Outlet, useLoaderData, useNavigation } from "@remix-run/react";
 import { InfiniteVirtualList } from "~/components/infinite-virtual-list";
 import { PostSearch } from "~/components/post-search";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
@@ -59,6 +59,7 @@ export default function gitposts() {
 
     return (
         <div className="w-full max-w-xl px-4 flex flex-col">
+            <Outlet />
             <Tabs defaultValue="view-posts" className="my-2">
                 <TabsList className="grid w-full grid-cols-2">
                     <TabsTrigger value="view-posts">View Posts</TabsTrigger>

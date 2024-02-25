@@ -1,7 +1,7 @@
 import { Session } from "@supabase/supabase-js"
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { PostWithDetails } from "./types";
+import { PostWithCommentDetails, PostWithDetails } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -66,4 +66,32 @@ export function formatToTwitterDate(dateTimeString: string) {
   }${minutes} ${amPM} · ${month} ${day}, ${year}`;
 
   return formattedDate;
+}
+
+
+export function combinePostsWithLikesAndComments(
+  data: PostWithCommentDetails[] | null, 
+  sessionUserId: String
+) {
+  const posts =
+    data?.map ((post) => {
+      const commentsWithAvatarUrl = post.comments.map((comment) => ({
+        ...comment,
+        author: {
+          username: comment.author!.username,
+          avatarUrl: comment.author!.avatar_url,
+        },
+      }));
+
+      return {
+        ...post,
+        isLikedByUser: !!post.likes.find(
+          (like) => like.user_id === sessionUserId
+        ),
+        likes: post.likes,
+        comments: commentsWithAvatarUrl,
+        author: post.author!,
+      };
+    }) ?? [];
+  return posts;
 }

@@ -172,3 +172,28 @@ export async function insertComment({
 
     return { error };
 }
+
+export async function getPostWithDetailsById({
+    dbClient,
+    postId,
+}: {
+    dbClient: SupabaseClient<Database>;
+    postId: string;
+}) {
+    let postQuery = dbClient
+        .from("posts")
+        .select("*, author: profiles(*), likes(user_id), comments(*, author: profiles(username, avatar_url))")
+        .order("created_at", { foreignTable: "comments", ascending: false })
+        .eq("id", postId);
+
+    const { data, error } = await postQuery;
+
+    if (error) {
+        console.error("Error occured during getPostWithDetailsById: ", error);
+    }
+
+    return {
+        data,
+        error,
+    };
+}
