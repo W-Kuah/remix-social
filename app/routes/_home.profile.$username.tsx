@@ -79,7 +79,7 @@ export default function Profile() {
             <br />
             <h1 className="text-xl font-heading font-bold">{`User posts`}</h1>
             <br />
-            <InfiniteVirtualList incomingPosts={posts} totalPages={totalPages}/>
+            <InfiniteVirtualList incomingPosts={posts} totalPages={totalPages} isProfile={true}/>
         </div>
     );
 }

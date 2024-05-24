@@ -44,13 +44,13 @@ export default function Index() {
             <Link to="/login">Join our Community</Link>
           </Button>
         </div>
-        {/* <Card className="relative group overflow-hidden rounded-lg md:w-1/2">
+        <Card className="relative group overflow-hidden rounded-lg md:w-1/2">
           <CardContent className="p-1">
             <video className="h-full w-full rounded-lg" autoPlay loop muted>
-              <source src="assets/videos/demo.mp4" type="video/mp4/"/>
+              <source src="assets/videos/demo.mp4" type="video/mp4"/>
             </video>
           </CardContent>
-        </Card> */}
+        </Card>
       </div>
     </section>
   );
