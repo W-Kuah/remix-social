@@ -14,7 +14,8 @@ export function getUserDataFromSession(session: Session) {
   const provider = session.user.app_metadata.provider;
   let username;
   if (provider == "google") {
-    username = session.user.user_metadata.split('@')[0];
+    username = session.user.user_metadata;
+    username = username.split('@')[0];
   } else {
     username = session.user.user_metadata.user_name;
   }
