@@ -7,8 +7,10 @@ import { getPostsForUser, getProfileForUsername } from "~/lib/database.server"
 import { getSupabaseWithSessionAndHeaders } from "~/lib/supabase.server"
 import { combinePostsWithLikes, getUserDataFromSession } from "~/lib/utils"
 
-export let loader = async ({ request, params }: LoaderFunctionArgs) => { 
+export let loader = async ({ request, params }: LoaderFunctionArgs) => {
     const { username } = params;
+    console.log(username);
+    console.log(params);
     const { supabase, headers, serverSession } = await getSupabaseWithSessionAndHeaders(
         {
             request,
