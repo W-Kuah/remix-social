@@ -15,7 +15,7 @@ export function InfiniteVirtualList({
     isProfile?: boolean;
 }) {
     const postRouteId = isProfile
-        ? "routes/_home.profile.$username.$postId"
+        ? "routes/_home.profile.$userId.$postId"
         : "routes/_home.gitposts.$postId";
     const { posts, loadMore, hasMorePages } = useInfinitePosts({
         incomingPosts,

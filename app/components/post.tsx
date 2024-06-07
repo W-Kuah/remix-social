@@ -45,10 +45,10 @@ export function Post({
                                 />
                                 <div className="ml-4">
                                     <div className="text-sm md:text-lg font-semibold">
-                                        <Link to={`/profile/${username}`}>{name}</Link>
+                                        <Link to={`/profile/${userId}`}>{name}</Link>
                                     </div>
                                     <div className="text-sm md:text-md text-gray-400">
-                                        <Link to={`/profile/${username}`}>{name}</Link>
+                                        <Link to={`/profile/${userId}`}>{username}</Link>
                                     </div>
                                 </div>
                             </div>

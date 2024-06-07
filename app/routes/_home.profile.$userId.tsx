@@ -3,14 +3,12 @@ import { LoaderFunctionArgs, json, redirect } from "@remix-run/node"
 import { Link, Outlet, ShouldRevalidateFunctionArgs, useLoaderData } from "@remix-run/react"
 import { InfiniteVirtualList } from "~/components/infinite-virtual-list"
 import { Separator } from "~/components/ui/separator"
-import { getPostsForUser, getProfileForUsername } from "~/lib/database.server"
+import { getPostsForUser, getProfileForUserId } from "~/lib/database.server"
 import { getSupabaseWithSessionAndHeaders } from "~/lib/supabase.server"
 import { combinePostsWithLikes, getUserDataFromSession } from "~/lib/utils"
 
 export let loader = async ({ request, params }: LoaderFunctionArgs) => {
-    const { username } = params;
-    console.log(username);
-    console.log(params);
+    const { userId } = params;
     const { supabase, headers, serverSession } = await getSupabaseWithSessionAndHeaders(
         {
             request,
@@ -21,7 +19,7 @@ export let loader = async ({ request, params }: LoaderFunctionArgs) => {
         return redirect("login", { headers });
     }
 
-    if (!username) {
+    if (!userId) {
         return redirect("/404", { headers });
     }
 
@@ -29,9 +27,9 @@ export let loader = async ({ request, params }: LoaderFunctionArgs) => {
     const searchParams = url.searchParams;
     const page = Number(searchParams.get("page")) || 1;
 
-    const { data: profile } = await getProfileForUsername({
+    const { data: profile } = await getProfileForUserId({
         dbClient: supabase,
-        username,
+        userId,
     });
 
     if(!profile) {
@@ -74,10 +72,10 @@ export default function Profile() {
                 <h1 className="text-2xl font-bold">{name}</h1>
                 {provider == 'github' ? (
                     <Link to={`https://github.com/${username}`}>
-                        <p className="text-zinc-500">@{username}</p>
+                        <p className="text-zinc-500">@{username} (GitHub Profile)</p>
                     </Link>
                 ) : (
-                <p className="text-zinc-500">@{username}</p>
+                <p className="text-zinc-500">@{username} (Google Profile)</p>
                 )}
             </div>
             <br />
@@ -96,7 +94,7 @@ export function shouldRevalidate({
   }: ShouldRevalidateFunctionArgs) {
     const skipRevalidation = 
         actionResult?.skipRevalidation && 
-        actionResult?.skipRevalidation?.includes("profile.$username");
+        actionResult?.skipRevalidation?.includes("profile.$userId");
 
     if(skipRevalidation) {
         return false;

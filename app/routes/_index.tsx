@@ -31,7 +31,7 @@ export default function Index() {
             <span className="font-extrabold bg-gradient-to-r from-orange-700 via-blue-500 to-green-400 text-transparent bg-clip-text bg-300% animate-gradient">
               Community-Driven
             </span>{" "}
-            Minimalist Social Platform for Coders
+            Minimalist Social Platform for Techies
           </h1>
 
           <p className="text-gray-500 mt-2">

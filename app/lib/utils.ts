@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getUserDataFromSession(session: Session) {
-  console.log(session);
+  // console.log(session);
   const userId = session.user.id;
   const userAvatarUrl = session.user.user_metadata.avatar_url;
   const provider = session.user.app_metadata.provider;

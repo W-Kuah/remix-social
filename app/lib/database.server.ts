@@ -69,7 +69,28 @@ export async function getProfileForUsername({
 
         const { data, error } = await profileQuery;
         if (error) {
-            console.log(`Error occurred during getProfileForUsername (requested ${username}): `, error);
+            console.log(`Error occurred during getProfileForUsername: `, error);
+        }
+
+        return { data, error };
+}
+
+export async function getProfileForUserId({
+    dbClient,
+    userId
+}: {
+    dbClient: SupabaseClient<Database>;
+    userId: string;
+}) {
+    const profileQuery = dbClient
+        .from("profiles")
+        .select("*")
+        .eq("id", userId)
+        .single();
+
+        const { data, error } = await profileQuery;
+        if (error) {
+            console.log(`Error occurred during getProfileForUserId: `, error);
         }
 
         return { data, error };
