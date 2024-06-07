@@ -69,7 +69,7 @@ export async function getProfileForUsername({
 
         const { data, error } = await profileQuery;
         if (error) {
-            console.log("Error occurred during getProfileForUsername : ", error);
+            console.log(`Error occurred during getProfileForUsername (requested ${username}): `, error);
         }
 
         return { data, error };
