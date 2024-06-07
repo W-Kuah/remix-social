@@ -20,7 +20,7 @@ export function getUserDataFromSession(session: Session) {
   }
   
 
-  return { userId, userAvatarUrl, username };
+  return { userId, userAvatarUrl, username, provider };
 }
 
 export function combinePostsWithLikes(

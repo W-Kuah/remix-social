@@ -60,7 +60,7 @@ export let loader = async ({ request, params }: LoaderFunctionArgs) => {
 
 export default function Profile() {
     const {
-        profile: { avatar_url, name, username },
+        profile: { avatar_url, name, username, provider},
         posts,
         totalPages,
     } = useLoaderData<typeof loader>();
@@ -72,9 +72,13 @@ export default function Profile() {
                     <AvatarImage alt="User avatar" src={avatar_url}></AvatarImage>
                 </Avatar>
                 <h1 className="text-2xl font-bold">{name}</h1>
-                <Link to={`https://github.com/${username}`}>
-                    <p className="text-zinc-500">@{username}</p>
-                </Link>
+                {provider == 'github' ? (
+                    <Link to={`https://github.com/${username}`}>
+                        <p className="text-zinc-500">@{username}</p>
+                    </Link>
+                ) : (
+                <p className="text-zinc-500">@{username}</p>
+                )}
             </div>
             <br />
             <Separator/>
