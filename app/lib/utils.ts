@@ -11,7 +11,14 @@ export function getUserDataFromSession(session: Session) {
   console.log(session);
   const userId = session.user.id;
   const userAvatarUrl = session.user.user_metadata.avatar_url;
-  const username = session.user.user_metadata.user_name;
+  const provider = session.user.app_metadata.provider;
+  let username;
+  if (provider == "google") {
+    username = session.user.user_metadata.split('@')[0];
+  } else {
+    username = session.user.user_metadata.user_name;
+  }
+  
 
   return { userId, userAvatarUrl, username };
 }
