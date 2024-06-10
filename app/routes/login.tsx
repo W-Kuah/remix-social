@@ -59,7 +59,7 @@ export default function Login() {
             </h1>
 
             <p className="text-gray-500 mt-2">
-                Our posts and comments are powered by Markdown
+                Google SSO is not supported on embedded webviews 
             </p>
             </div>
             <Card className="relative group overflow-hidden rounded-lg">
