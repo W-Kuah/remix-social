@@ -59,7 +59,7 @@ export default function Login() {
             </h1>
 
             <p className="text-gray-500 mt-2">
-                Google SSO is not supported on embedded webviews 
+                Ready to show everyone Wazzup?
             </p>
             </div>
             <Card className="relative group overflow-hidden rounded-lg">

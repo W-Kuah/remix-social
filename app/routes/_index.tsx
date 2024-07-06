@@ -4,6 +4,8 @@ import { AppLogo } from "~/components/app-logo";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
 import { getSupabaseWithSessionAndHeaders } from "~/lib/supabase.server";
+import useWebViewDetection from '~/components/useWebViewDetection'
+
 
 export let loader = async ({ request }: LoaderFunctionArgs) => {
   const { headers, serverSession } = await getSupabaseWithSessionAndHeaders({
@@ -18,6 +20,7 @@ export let loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export default function Index() {
+  useWebViewDetection();
   return (
     <section className="w-full bg-white min-h-screen flex flex-col">
       <nav className="flex items-center space-x-2 p-4">
@@ -35,9 +38,13 @@ export default function Index() {
           </h1>
 
           <p className="text-gray-500 mt-2">
-            Powered by {" "}
-            <span className="text-blue-700 font-bold mt-2">Remix</span> and{" "}
-            <span className="text-green-700 font-bold mt-2">Supabase</span>
+            Dive into a {" "}
+            <span className="text-blue-700 font-bold mt-2">vibrant</span> {" "}
+            community where sharing your "aha" {" "}
+            <span className="text-green-700 font-bold mt-2">moments</span> {" "}
+            and <br/> connecting with {" "}
+            <span className="text-orange-700 font-bold mt-2">like-minded</span> {" "}
+            people has never been easier. 
           </p>
 
           <Button asChild>
