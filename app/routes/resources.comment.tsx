@@ -16,7 +16,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const postId = formData.get("postId")?.toString();
     const userId = formData.get("userId")?.toString();
 
-    const skipRevalidation = ['gitposts', 'profile.$username']
+    const skipRevalidation = ['gitposts', 'profile.$userId']
 
 
     if (!userId || !postId || !title) {

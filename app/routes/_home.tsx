@@ -29,7 +29,7 @@ export const loader = async ({ request } : LoaderFunctionArgs) => {
 
 export default function Home() {
     const {
-        userDetails: { userAvatarUrl, username },
+        userDetails: { userAvatarUrl, username, userId },
     } = useLoaderData<typeof loader>();
     
     const [isNavOpen, setNavOpen] = useState(false);
@@ -56,7 +56,7 @@ export default function Home() {
                         : "hidden md:flex"
                     }`}
                 >
-                    <Link prefetch="intent" to={`/profile/${username}`}>@{username}</Link>
+                    <Link prefetch="intent" to={`/profile/${userId}`}>@{username}</Link>
                     <img 
                         alt="Profile" 
                         className="rounded-full"
