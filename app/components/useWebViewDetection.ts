@@ -25,6 +25,7 @@ const useWebViewDetection = () => {
       link.href = 'https://www.wazzupsocials.com'
       link.target = '_blank'
       document.body.appendChild(link);
+      link.click();
       // window.open('https://www.wazzupsocials.com', '_blank')
     }
   }, [navigate]);
