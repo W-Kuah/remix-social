@@ -22,7 +22,7 @@ const useWebViewDetection = () => {
 
     if (isWebView || isStandalone) {
       
-      window.open('https://www.wazzupsocials.com', '_system');
+      window.top.location.href = window.self.location.href;
     }
   }, [navigate]);
 };
