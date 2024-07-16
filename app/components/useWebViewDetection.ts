@@ -22,7 +22,7 @@ const useWebViewDetection = () => {
 
     if (isWebView || isStandalone) {
       event?.defaultPrevented;
-      window.open('https://www.wazzupsocials.com', '_system')
+      window.open('https://www.wazzupsocials.com', '_blank')
     }
   }, [navigate]);
 };
