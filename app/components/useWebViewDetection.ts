@@ -21,8 +21,11 @@ const useWebViewDetection = () => {
     const isStandalone = navigatorWithStandalone.standalone || window.matchMedia('(display-mode: standalone)').matches;
 
     if (isWebView || isStandalone) {
-      event?.defaultPrevented;
-      window.open('https://www.wazzupsocials.com', '_blank')
+      let link = document.createElement('a');
+      link.href = 'https://www.wazzupsocials.com'
+      link.target = '_blank'
+      document.body.appendChild(link);
+      // window.open('https://www.wazzupsocials.com', '_blank')
     }
   }, [navigate]);
 };
