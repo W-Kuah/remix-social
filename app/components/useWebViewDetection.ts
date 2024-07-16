@@ -21,7 +21,7 @@ const useWebViewDetection = () => {
     const isStandalone = navigatorWithStandalone.standalone || window.matchMedia('(display-mode: standalone)').matches;
 
     if (isWebView || isStandalone) {
-      navigate('/redirect', { replace: true });
+      navigate('/', { replace: true });
     }
   }, [navigate]);
 };
