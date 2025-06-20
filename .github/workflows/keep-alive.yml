@@ -1,15 +1,11 @@
 name: Ping Supabase to Prevent Pausing
-
 on:
   schedule:
-    # 9:00am (`0, 9`), every day (`*`), every month (`*`), monday and thursday (`1, 4`)
     - cron: '0 9 * * 1,4'
   workflow_dispatch:
-
 jobs:
   ping:
     runs-on: ubuntu-latest
-
     steps:
       - name: Ping Supabase via PostgREST
         env:
